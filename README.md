@@ -27,6 +27,8 @@ pip install praw
 
 ### Weather.py
 To use this file you will need an API key (free version gives: 1000 queries per day): [WeatherBit](https://www.weatherbit.io/api)
+
+Example 1(1 Day 3 Hour Interval Forecast)
 ```py
 import asyncio
 import discord
@@ -36,7 +38,7 @@ from urllib.request import urlopen
 from discord.ext import commands
 
 #This file will still use the same prefix of the main file to call functions
-#in this case it is "!"
+#in this case it is "!" (check bot.py to see the prefix or change it)
 class Weather:
     def __init__(self, bot):
         self.bot = bot
@@ -78,7 +80,7 @@ class Weather:
                 
                 #if Chance of Rain is great than 50% output a sign(umbrella emotes in this case)
                 if temp_pop >= 50:
-                    await self.bot.send_message(ctx.message.channel,":umbrella2: :umbrella2: :umbrella2: :umbrella2: :umbrella2:      :umbrella2: :umbrella2:")
+                    await self.bot.send_message(ctx.message.channel,":umbrella2: :umbrella2: :umbrella2: :umbrella2: :umbrella2:   :umbrella2: :umbrella2:")
                 #if tempature is less than 45.0 F output a sign(snowflake emotes in this case)
                 if temp_temp<=45.0:
                     await self.bot.send_message(ctx.message.channel,":snowflake: :snowflake: :snowflake: :snowflake: :snowflake: :snowflake: :snowflake: ")
@@ -94,9 +96,82 @@ class Weather:
                 embed.add_field(name='Chance of Rain', value=str(pop+"%"), inline=True)
                 embed.add_field(name='Humidity', value=str(hum+"%"), inline=True)
                 await self.bot.send_message(ctx.message.channel,embed=embed)
+ 
+# When you run bot.py ('Weather is loaded') should be printed to console
+#else if you have an error in the file(usually syntax)
+def setup(bot):
+    bot.add_cog(Weather(bot))
+    print('Weather is loaded')
 ```
+Example 2(7 Day Forecast 1 Day Interval)
+```py
+import asyncio
+import discord
+import datetime
+import urllib.request, json
+from urllib.request import urlopen
+from discord.ext import commands
 
+#This file will still use the same prefix of the main file to call functions
+#in this case it is "!" (check bot.py to see the prefix or change it)
+class Weather:
+    def __init__(self, bot):
+        self.bot = bot
+        
+    @commands.command(pass_context=True)
+    async def forecast(self,ctx):
+        location = ctx.message.content
+        location = location[9:]
+        myarr = location.split()
+        
+        #The url format tells you the data it will get, for this example it will go to (16-days 1D-interval) data and gets 7 day
+        #https://www.weatherbit.io/api/swaggerui/weather-api-v2#/ <---will show you how to create a link
+        
+        url = "https://api.weatherbit.io/v2.0/forecast/daily?city="+myarr[0]+"&country="+myarr[1]+"&units=I&key=YOUR-API-KEY-HERE"
+        
+        #Getting data from url and loading into json format in python
+        response = urlopen(url)
+        d = response.read().decode()
+        data = json.loads(d)
+        
+        #Gets data for 7 days(local time of location)
+        # In Imerpial units
+        for x in range(0,7):
+            dt = str(data['data'][x]['datetime'])
+            tempMax= str(data['data'][x]['max_temp'])
+            tempMin= str(data['data'][x]['app_min_temp'])
+            tempAMax= str(data['data'][x]['app_max_temp'])
+            tempAMin= str(data['data'][x]['app_max_temp'])
+            snow=str(data['data'][x]['snow'])
+            pop=str(data['data'][x]['pop'])
+            precip=str(data['data'][x]['precip'])
+            hum=str(data['data'][x]['rh'])
+            weath=str(data['data'][x]['weather']['description'])
+            
+            #Using embedded message to give it a nice format
+            embed=discord.Embed(title="Location", description=myarr[0]+","+ myarr[1], color=discord.Color(0x0ae1fd))
+            embed.set_author(name="Weather Forecast")
+            embed.add_field(name="Weather Discription", value=weath, inline=True)
+            embed.add_field(name="date time", value=dt, inline=True)
+            embed.add_field(name="Temperature", value=str("Max Temp: "+tempMax+"\nMin Temp: "+tempMin+"\nMax App Temp: "+tempAMax+"\nMin App Temp: "+tempAMin), inline=True)
+            embed.add_field(name='Precipitation', value=str(precip+"%"), inline=True)
+            embed.add_field(name='Snow', value=str(snow+"%"), inline=True)
+            embed.add_field(name='Chance of Rain', value=str(pop+"%"), inline=True)
+            embed.add_field(name='Humidity', value=str(hum+"%"), inline=True)
+            await self.bot.send_message(ctx.message.channel,embed=embed)
+            
+# When you run bot.py ('Weather is loaded') should be printed to console
+#else if you have an error in the file(usually syntax)
+def setup(bot):
+    bot.add_cog(Weather(bot))
+    print('Weather is loaded')
+```
 ### Music.py
 ### Reddit.py
+To use this file you will need an API key and API wrapper(for ease): [Reddit API](https://www.reddit.com/prefs/apps)---[Reddit API Wrapper](https://github.com/praw-dev/praw)
+```py
+
+
+```
 ### Commands && On_Message
 ### Background Task
