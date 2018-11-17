@@ -1,19 +1,18 @@
 # Discord-Bot
-Discord bot made with discord.py libary(must use python 3.4-3.6) to work
+![PyPI](https://img.shields.io/badge/python-3.4--3.6-green.svg)
+![PyPI](https://img.shields.io/badge/build-passing-green.svg)
+
+This is for a Discord bot using the discord.py wrapper made for fun, used in a couple of my own servers.
+
 
 ## Getting Started
 
-### Prerequisites
-```
-Python 3.4 - 3.6
-```
-
 ### Installing
-
+Install with pip for your ease:
 ```
-pip install -U discord.py        
+pip install -U discord.py[voice]    
 pip install --upgrade youtube-dl 
-pip install praw                 
+pip install praw  
 ```
 
 ## Built With
