@@ -8,7 +8,7 @@ This is for a Discord bot using the discord.py wrapper made for fun.
 ## Getting Started
 
 ### Installing
-Install with pip for your ease:
+Installation can be completed using the following pips:
 ```
 pip install -U discord.py[voice]    
 pip install --upgrade youtube-dl 
@@ -28,7 +28,7 @@ pip install praw
 ### Weather.py
 To use this file you will need an API key (free version gives: 1000 queries per day): [WeatherBit](https://www.weatherbit.io/api)
 
-Example 1(1 Day 3 Hour Interval Forecast)
+#### Example 1(1 Day 3 Hour Interval Forecast)
 ```py
 import asyncio
 import discord
@@ -103,7 +103,7 @@ def setup(bot):
     bot.add_cog(Weather(bot))
     print('Weather is loaded')
 ```
-Example 2(7 Day Forecast 1 Day Interval)
+#### Example 2(7 Day Forecast 1 Day Interval)
 ```py
 import asyncio
 import discord
@@ -173,7 +173,7 @@ def setup(bot):
 ### Reddit.py
 To use this file you will need an API key and API wrapper(for ease): [Reddit API](https://www.reddit.com/prefs/apps)---[Reddit API Wrapper](https://github.com/praw-dev/praw)
 
-Example 1(Background task to grab reddit links off subreddits of choice)
+#### Example 1(Background task to grab reddit links off subreddits of choice)
 ```py
 import discord
 import random
@@ -251,7 +251,7 @@ def setup(bot):
     bot.add_cog(Reddit(bot))
     print('Reddit is loaded')
 ```
-Example 2(Making a command to grab a post off subreddit)
+#### Example 2(Making a command to grab a post off subreddit)
 ```py
 import discord
 import random
@@ -289,7 +289,7 @@ def setup(bot):
     bot.add_cog(Reddit(bot))
     print('Reddit is loaded')
 ```
-Example 3(Making a command to grab a post off a specified subreddit)
+#### Example 3(Making a command to grab a post off a specified subreddit)
 ```py
 import discord
 import random
