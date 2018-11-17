@@ -172,6 +172,7 @@ def setup(bot):
 ```
 ### Reddit.py
 To use this file you will need an API key and API wrapper(for ease): [Reddit API](https://www.reddit.com/prefs/apps)---[Reddit API Wrapper](https://github.com/praw-dev/praw)
+
 Example 1(Background task to grab reddit links off subreddits of choice)
 ```py
 import discord
@@ -250,5 +251,90 @@ def setup(bot):
     bot.add_cog(Reddit(bot))
     print('Reddit is loaded')
 ```
-### Commands && On_Message
-### Background Task
+Example 2(Making a command to grab a post off subreddit)
+```py
+import discord
+import random
+import asyncio
+import praw
+from discord.ext import commands
+
+#You can get Client_id/Client_secret/User_agent from the url below
+#https://www.reddit.com/prefs/apps
+#You need to create a reddit application to get this infomation
+
+reddit = praw.Reddit(client_id='XXXXXXXXXXX',
+                     client_secret='XXXXXXXXXXXXXXXXXXX',
+                     user_agent='Name of the application')
+
+class Reddit:
+    def __init__(self, bot):
+        self.bot = bot
+        
+    #allows for the prefix set in Bot.py to work to call this function
+    @commands.command(pass_context=True)
+    async def puppy(self):
+        #Decides what subreddit you are going to
+        pup = reddit.subreddit('puppies').hot()
+        
+        #picks a post from the top 20
+        post_to_pick = random.randint(1, 20)
+        
+        Goes to /r/puppy reddit and grabs a random post from the hot section
+        for i in range(0, post_to_pick):
+            submission = next(x for x in pup if not x.stickied)
+        await self.bot.say(submission.url)
+
+def setup(bot):
+    bot.add_cog(Reddit(bot))
+    print('Reddit is loaded')
+```
+Example 3(Making a command to grab a post off a specified subreddit)
+```py
+import discord
+import random
+import asyncio
+import praw
+from discord.ext import commands
+
+#You can get Client_id/Client_secret/User_agent from the url below
+#https://www.reddit.com/prefs/apps
+#You need to create a reddit application to get this infomation
+
+reddit = praw.Reddit(client_id='XXXXXXXXXXX',
+                     client_secret='XXXXXXXXXXXXXXXXXXX',
+                     user_agent='Name of the application')
+
+class Reddit:
+    def __init__(self, bot):
+        self.bot = bot
+        
+    #allows for the prefix set in Bot.py to work to call this function
+    @commands.command(pass_context=True)
+    async def redditThis(self,ctx):
+        
+        #!redditThis puppy
+        subreddit = ctx.message.content
+        #Getting rid of "!redditThis "
+        subreddit = subreddit[12:]
+        
+        #Decides what subreddit you are going to
+        pup = reddit.subreddit(subreddit).hot()
+        
+        #picks a post from the top 20
+        post_to_pick = random.randint(1, 20)
+        
+        Goes to specified reddit and grabs a random post from the hot section
+        for i in range(0, post_to_pick):
+            submission = next(x for x in pup if not x.stickied)
+        await self.bot.say(submission.url)
+
+def setup(bot):
+    bot.add_cog(Reddit(bot))
+    print('Reddit is loaded')
+    ```
+    
+### Commands & On_Message
+```py
+
+```
