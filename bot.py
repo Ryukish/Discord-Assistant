@@ -66,8 +66,8 @@ async def hello(ctx):
     await bot.say("hi")
 
 @bot.command(pass_context=True)
-async def Mastercs(ctx):
-    await bot.say("https://ssl.uh.edu/nsm/computer-science/graduate/masters/")
+async def MasterThis(ctx):
+    await bot.say("----url link----")
 
 
 if __name__ == "__main__":
