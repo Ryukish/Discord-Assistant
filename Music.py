@@ -2,14 +2,8 @@ import asyncio
 import discord
 from discord.ext import commands
 if not discord.opus.is_loaded():
-    # the 'opus' library here is opus.dll on windows
-    # or libopus.so on linux in the current directory
-    # you should replace this with the location the
-    # opus library is located in and with the proper filename.
-    # note that on windows this DLL is automatically provided for you
     discord.opus.load_opus('opus')
 
-tell=1;
 
 def __init__(self, bot):
         self.bot = bot
@@ -123,13 +117,6 @@ class Music:
 
     @commands.command(pass_context=True, no_pm=True)
     async def play(self, ctx, *, song : str):
-        """Plays a song.
-        If there is a song currently in the queue, then it is
-        queued until the next song is done playing.
-        This command automatically searches as well from YouTube.
-        The list of supported sites can be found here:
-        https://rg3.github.io/youtube-dl/supportedsites.html
-        """
         state = self.get_voice_state(ctx.message.server)
         opts = {
             'default_search': 'auto',
@@ -183,7 +170,26 @@ class Music:
             player.pause()
             tell=0;
             
-    
+    @commands.command(pass_context=True, no_pm=True)
+    async def killyourself(self, ctx):
+        """Stops playing audio and leaves the voice channel.
+        This also clears the queue.
+        """
+        server = ctx.message.server
+        state = self.get_voice_state(server)
+
+        if state.is_playing():
+            player = state.player
+            player.stop()
+
+        try:
+            state.audio_player.cancel()
+            del self.voice_states[server.id]
+            await state.voice.disconnect()
+            await self.bot.say("Cleared the queue and disconnected from voice channel")
+        except:
+            pass
+
 
     @commands.command(pass_context=True, no_pm=True)
     async def skip(self, ctx):
