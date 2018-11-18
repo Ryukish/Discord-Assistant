@@ -8,7 +8,7 @@ This is for a Discord bot using the discord.py wrapper made for fun.
 ## Getting Started
 
 ### Installing
-Install with pip for your ease:
+Installation can be completed using the following pips:
 ```
 pip install -U discord.py[voice]    
 pip install --upgrade youtube-dl 
@@ -28,7 +28,7 @@ pip install praw
 ### Weather.py
 To use this file you will need an API key (free version gives: 1000 queries per day): [WeatherBit](https://www.weatherbit.io/api)
 
-Example 1(1 Day 3 Hour Interval Forecast)
+#### Example 1(1 Day 3 Hour Interval Forecast)
 ```py
 import asyncio
 import discord
@@ -103,7 +103,7 @@ def setup(bot):
     bot.add_cog(Weather(bot))
     print('Weather is loaded')
 ```
-Example 2(7 Day Forecast 1 Day Interval)
+#### Example 2(7 Day Forecast 1 Day Interval)
 ```py
 import asyncio
 import discord
@@ -167,11 +167,174 @@ def setup(bot):
     print('Weather is loaded')
 ```
 ### Music.py
-### Reddit.py
-To use this file you will need an API key and API wrapper(for ease): [Reddit API](https://www.reddit.com/prefs/apps)---[Reddit API Wrapper](https://github.com/praw-dev/praw)
-```py
-
+```
 
 ```
-### Commands && On_Message
-### Background Task
+### Reddit.py
+To use this file you will need an API key and API wrapper(for ease): [Reddit API](https://www.reddit.com/prefs/apps)---[Reddit API Wrapper](https://github.com/praw-dev/praw)
+
+#### Example 1(Background task to grab reddit links off subreddits of choice)
+```py
+import discord
+import random
+import asyncio
+import praw
+from discord.ext import commands
+
+#You can get Client_id/Client_secret/User_agent from the url below
+#https://www.reddit.com/prefs/apps
+#You need to create a reddit application to get this infomation
+
+reddit = praw.Reddit(client_id='XXXXXXXXXXX',
+                     client_secret='XXXXXXXXXXXXXXXXXXX',
+                     user_agent='Name of the application')
+
+class Reddit:
+    def __init__(self, bot):
+        self.bot = bot
+        #Starts the loops so that it will run constantly while the bot.py is running
+        self.bot.loop.create_task(self.background_task())
+        self.bot.loop.create_task(self.dm_task())
+
+    async def background_task(self):
+        await self.bot.wait_until_ready()
+        
+        #The channel id can be gotten from discord when you right click a channel(Must have developer mode on in discord)
+        channel = discord.Object(id='-----channel id-----')
+        #Makes so it doesn't start for 1 hour(3600 seconds/ 60 mins = 1 hour)
+        #Runs in seconds 
+        await asyncio.sleep(3600)
+        while not self.bot.is_closed:
+           #while the bot.py is still running, do this
+           
+           #Decides what subreddit you are going to
+            mes = reddit.subreddit('memes').hot()
+            
+            #picks a post from the top 20
+            post_to_pick = random.randint(1, 20)
+            
+            #Goes to /r/memes reddit and grabs a random post from the hot section
+            for i in range(0, post_to_pick):
+                submission = next(x for x in mes if not x.stickied)
+            await self.bot.send_message(channel, submission.url)
+            
+            #sleeps for 1 hour then repeats
+            await asyncio.sleep(3600)
+            
+    async def dm_task(self):
+        await self.bot.wait_until_ready()
+        hi = await self.bot.get_user_info('----USER ID----')
+        
+        #sleeps for 3h ours then starts
+        await asyncio.sleep(10800)
+        
+        while not self.bot.is_closed:
+            #while the bot.py is still running, do this
+            
+            #Decides what subreddit you are going to
+            mes = reddit.subreddit('memes').hot()
+            
+            #picks a post from the top 20
+            post_to_pick = random.randint(1, 20)
+            
+            #Goes to /r/memes reddit and grabs a random post from the hot section
+            for i in range(0, post_to_pick):
+                submission = next(x for x in mes if not x.stickied)
+                
+            #The bot sends a private Message to the User
+            await self.bot.send_message(hi, submission.url)
+            
+            #Sleeps for 3 hours and repeats
+            await asyncio.sleep(10800)
+            
+def setup(bot):
+    bot.add_cog(Reddit(bot))
+    print('Reddit is loaded')
+```
+#### Example 2(Making a command to grab a post off subreddit)
+```py
+import discord
+import random
+import asyncio
+import praw
+from discord.ext import commands
+
+#You can get Client_id/Client_secret/User_agent from the url below
+#https://www.reddit.com/prefs/apps
+#You need to create a reddit application to get this infomation
+
+reddit = praw.Reddit(client_id='XXXXXXXXXXX',
+                     client_secret='XXXXXXXXXXXXXXXXXXX',
+                     user_agent='Name of the application')
+
+class Reddit:
+    def __init__(self, bot):
+        self.bot = bot
+        
+    #allows for the prefix set in Bot.py to work to call this function
+    @commands.command(pass_context=True)
+    async def puppy(self):
+        #Decides what subreddit you are going to
+        pup = reddit.subreddit('puppies').hot()
+        
+        #picks a post from the top 20
+        post_to_pick = random.randint(1, 20)
+        
+        Goes to /r/puppy reddit and grabs a random post from the hot section
+        for i in range(0, post_to_pick):
+            submission = next(x for x in pup if not x.stickied)
+        await self.bot.say(submission.url)
+
+def setup(bot):
+    bot.add_cog(Reddit(bot))
+    print('Reddit is loaded')
+```
+#### Example 3(Making a command to grab a post off a specified subreddit)
+```py
+import discord
+import random
+import asyncio
+import praw
+from discord.ext import commands
+
+#You can get Client_id/Client_secret/User_agent from the url below
+#https://www.reddit.com/prefs/apps
+#You need to create a reddit application to get this infomation
+
+reddit = praw.Reddit(client_id='XXXXXXXXXXX',
+                     client_secret='XXXXXXXXXXXXXXXXXXX',
+                     user_agent='Name of the application')
+
+class Reddit:
+    def __init__(self, bot):
+        self.bot = bot
+        
+    #allows for the prefix set in Bot.py to work to call this function
+    @commands.command(pass_context=True)
+    async def redditThis(self,ctx):
+        
+        #!redditThis puppy
+        subreddit = ctx.message.content
+        #Getting rid of "!redditThis "
+        subreddit = subreddit[12:]
+        
+        #Decides what subreddit you are going to
+        pup = reddit.subreddit(subreddit).hot()
+        
+        #picks a post from the top 20
+        post_to_pick = random.randint(1, 20)
+        
+        Goes to specified reddit and grabs a random post from the hot section
+        for i in range(0, post_to_pick):
+            submission = next(x for x in pup if not x.stickied)
+        await self.bot.say(submission.url)
+
+def setup(bot):
+    bot.add_cog(Reddit(bot))
+    print('Reddit is loaded')
+    ```
+    
+### Commands & On_Message
+```py
+
+```
