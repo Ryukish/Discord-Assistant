@@ -554,7 +554,7 @@ class Music:
 #If you mention or @ the bot it will pick a random relpy from the list and print it
 @bot.listen()
 async def on_message(message): 
-    if "@---ID OF THE BOT--- in message.content.lower():
+    if "@---ID OF THE BOT---" in message.content.lower():
         mylist =["Yes?","Hello!!"]
         new_message = random.choice(mylist)
         await bot.send_message(message.channel, new_message)
