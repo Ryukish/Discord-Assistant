@@ -26,7 +26,8 @@ pip install praw
 ## Explanations and Examples
 
 ### Weather.py
-To use this file you will need an API key (free version gives: 1000 queries per day): [WeatherBit](https://www.weatherbit.io/api)
+To use this file you will need an API key (free version gives: 1000 queries per day)
+* [WeatherBit](https://www.weatherbit.io/api) - The API used to get Weather Data in a JSON format
 
 #### Header 
 ```py
@@ -159,7 +160,9 @@ def setup(bot):
             await self.bot.send_message(ctx.message.channel,embed=embed)           
 ```
 ### Reddit.py
-To use this file you will need an API key and API wrapper(for ease): [Reddit API](https://www.reddit.com/prefs/apps)---[Reddit API Wrapper](https://github.com/praw-dev/praw)
+To use this file you will need an API key and API wrapper(for ease). 
+* [Reddit API Wrapper](https://github.com/praw-dev/praw)
+* [Reddit API Wrapper](https://github.com/praw-dev/praw) - API wrapper to allow for python written reddit scripts
 
 #### Header
 ```py
@@ -514,10 +517,39 @@ class Music:
             await self.bot.say('Not playing anything.')
         else:
             skip_count = len(state.skip_votes)
-            await self.bot.say('Now playing {} [skips: {}/3]'.format(state.current, skip_count))
+            
 ```            
 ### Commands & On_Message
+#### On_Message(No need for prefix("!command") use if you use these)
 ```py
+#If you mention or @ the bot it will pick a random relpy from the list and print it
+@bot.listen()
+async def on_message(message): 
+    if "@---ID OF THE BOT--- in message.content.lower():
+        mylist =["Yes?","Hello!!"]
+        new_message = random.choice(mylist)
+        await bot.send_message(message.channel, new_message)
+        await bot.process_commands(message)
 
+#Will find the given message in a sentence with out the command prefixs.
+@bot.listen()
+async def on_message(message):
+    if message.author.bot:
+        return
+    if "What is up guys" in message.content.lower():
+        await bot.send_message(message.channel,"Nothing much")
+        await bot.process_commands(message)
+```
+#### Commmands(Commands use the specific bot prefix you define to call these(!hello), "!" is the prefix)
+```
+@bot.command(pass_context=True)
+async def hello(ctx):
+    await bot.say("hi")
 
+@bot.command(pass_context=True)
+async def FunnyStuff(ctx):
+    mypath = r"C:\Users\Desktop\funny"
+    channel=ctx.message.channel.id
+    choice = os.path.join(mypath, random.choice(os.listdir(mypath))) 
+    await bot.send_file(discord.Object(id=channel), choice)
 ```
