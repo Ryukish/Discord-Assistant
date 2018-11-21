@@ -44,7 +44,7 @@ class Weather:
         self.bot = bot
         
 
-  -----Weather functiosn/classes-----
+  ---- Functions & Classes of the Weather.py ----
 
 
 # When you run bot.py ('Weather is loaded') should be printed to console
@@ -161,7 +161,7 @@ def setup(bot):
 ### Reddit.py
 To use this file you will need an API key and API wrapper(for ease): [Reddit API](https://www.reddit.com/prefs/apps)---[Reddit API Wrapper](https://github.com/praw-dev/praw)
 
-#### Example 1(Background task to grab reddit links off subreddits of choice)
+#### Header
 ```py
 import discord
 import random
@@ -177,6 +177,20 @@ reddit = praw.Reddit(client_id='XXXXXXXXXXX',
                      client_secret='XXXXXXXXXXXXXXXXXXX',
                      user_agent='Name of the application')
 
+class Reddit:
+    def __init__(self, bot):
+        self.bot = bot
+        
+        
+---- Functions & Classes of the Reddit.py ----
+
+def setup(bot):
+    bot.add_cog(Reddit(bot))
+    print('Reddit is loaded')
+```
+        
+#### Example 1(Background task to grab reddit links off subreddits of choice)
+```py
 class Reddit:
     def __init__(self, bot):
         self.bot = bot
@@ -234,31 +248,9 @@ class Reddit:
             
             #Sleeps for 3 hours and repeats
             await asyncio.sleep(10800)
-            
-def setup(bot):
-    bot.add_cog(Reddit(bot))
-    print('Reddit is loaded')
 ```
 #### Example 2(Making a command to grab a post off subreddit)
 ```py
-import discord
-import random
-import asyncio
-import praw
-from discord.ext import commands
-
-#You can get Client_id/Client_secret/User_agent from the url below
-#https://www.reddit.com/prefs/apps
-#You need to create a reddit application to get this infomation
-
-reddit = praw.Reddit(client_id='XXXXXXXXXXX',
-                     client_secret='XXXXXXXXXXXXXXXXXXX',
-                     user_agent='Name of the application')
-
-class Reddit:
-    def __init__(self, bot):
-        self.bot = bot
-        
     #allows for the prefix set in Bot.py to work to call this function
     @commands.command(pass_context=True)
     async def puppy(self):
@@ -272,31 +264,9 @@ class Reddit:
         for i in range(0, post_to_pick):
             submission = next(x for x in pup if not x.stickied)
         await self.bot.say(submission.url)
-
-def setup(bot):
-    bot.add_cog(Reddit(bot))
-    print('Reddit is loaded')
 ```
 #### Example 3(Making a command to grab a post off a specified subreddit)
 ```py
-import discord
-import random
-import asyncio
-import praw
-from discord.ext import commands
-
-#You can get Client_id/Client_secret/User_agent from the url below
-#https://www.reddit.com/prefs/apps
-#You need to create a reddit application to get this infomation
-
-reddit = praw.Reddit(client_id='XXXXXXXXXXX',
-                     client_secret='XXXXXXXXXXXXXXXXXXX',
-                     user_agent='Name of the application')
-
-class Reddit:
-    def __init__(self, bot):
-        self.bot = bot
-        
     #allows for the prefix set in Bot.py to work to call this function
     @commands.command(pass_context=True)
     async def redditThis(self,ctx):
@@ -316,14 +286,13 @@ class Reddit:
         for i in range(0, post_to_pick):
             submission = next(x for x in pup if not x.stickied)
         await self.bot.say(submission.url)
-
-def setup(bot):
-    bot.add_cog(Reddit(bot))
-    print('Reddit is loaded')
 ```
 ### Music.py
-
-#### Basic Header of Music.py
+You will use Youtube-dl to download the videos into the queue(ffmpeg.exe).
+Discord api wrapper provides the framework to get the bot to join channels and play music/queue up music.
+* Youtube-dl - Used to get Youtube videos to play through discord bot
+* Discord.py API Wrapper - API wrapper to allow for python written discord bot
+#### Header
 ```py
 import asyncio
 import discord
@@ -336,7 +305,7 @@ def __init__(self, bot):
         self.bot = bot
         
         
-      -----Functions & Classes of the Music.py go here-----
+      ---- Functions & Classes of the Music.py ----
         
 def setup(bot):
     bot.add_cog(Music(bot))
@@ -366,7 +335,7 @@ def setup(bot):
         self.bot = bot
         self.play_next_song = asyncio.Event()
         self.songs = asyncio.Queue()
-        self.skip_votes = set() # a set of user_ids that voted
+        self.skip_votes = set()
         self.audio_player = self.bot.loop.create_task(self.audio_player_task())
 
     def is_playing(self):
@@ -396,12 +365,9 @@ def setup(bot):
             self.current.player.start()
             await self.play_next_song.wait()
   ```
-Class Music
+#### Class Music
 ```py
 class Music:
-    """Voice related commands.
-    Works in multiple servers at once.
-    """
     def __init__(self, bot):
         self.bot = bot
         self.voice_states = {}
@@ -430,7 +396,6 @@ class Music:
 
     @commands.command(pass_context=True, no_pm=True)
     async def join(self, ctx, *, channel : discord.Channel):
-        """Joins a voice channel."""
         try:
             await self.create_voice_client(channel)
         except discord.ClientException:
@@ -442,7 +407,6 @@ class Music:
 
     @commands.command(pass_context=True, no_pm=True)
     async def summon(self, ctx):
-        """Summons the bot to join your voice channel."""
         summoned_channel = ctx.message.author.voice_channel
         if summoned_channel is None:
             await self.bot.say('Not in a channel boi!!')
@@ -483,8 +447,6 @@ class Music:
 
     @commands.command(pass_context=True, no_pm=True)
     async def volume(self, ctx, value : int):
-        """Sets the volume of the currently playing song."""
-
         state = self.get_voice_state(ctx.message.server)
         if state.is_playing():
             player = state.player
@@ -493,7 +455,6 @@ class Music:
             
     @commands.command(pass_context=True, no_pm=True)
     async def resume(self, ctx):
-        """Resumes the currently played song."""
         state = self.get_voice_state(ctx.message.server)
         if state.is_playing():
             player = state.player
@@ -502,8 +463,6 @@ class Music:
             
     @commands.command(pass_context=True, no_pm=True)
     async def pause(self, ctx):
-        """.
-        """
         server = ctx.message.server
         state = self.get_voice_state(server)
         if state.is_playing():
@@ -512,10 +471,7 @@ class Music:
             tell=0;
             
     @commands.command(pass_context=True, no_pm=True)
-    async def killyourself(self, ctx):
-        """Stops playing audio and leaves the voice channel.
-        This also clears the queue.
-        """
+    async def EndAll(self, ctx):
         server = ctx.message.server
         state = self.get_voice_state(server)
 
@@ -534,10 +490,6 @@ class Music:
 
     @commands.command(pass_context=True, no_pm=True)
     async def skip(self, ctx):
-        """Vote to skip a song. The song requester can automatically skip.
-        3 skip votes are needed for the song to be skipped.
-        """
-
         state = self.get_voice_state(ctx.message.server)
         if not state.is_playing():
             await self.bot.say('Not playing any music right now...')
@@ -557,8 +509,6 @@ class Music:
 
     @commands.command(pass_context=True, no_pm=True)
     async def playing(self, ctx):
-        """Shows info about the currently played song."""
-
         state = self.get_voice_state(ctx.message.server)
         if state.current is None:
             await self.bot.say('Not playing anything.')
@@ -568,5 +518,6 @@ class Music:
 ```            
 ### Commands & On_Message
 ```py
+
 
 ```
