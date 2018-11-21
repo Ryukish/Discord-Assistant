@@ -28,7 +28,7 @@ pip install praw
 ### Weather.py
 To use this file you will need an API key (free version gives: 1000 queries per day): [WeatherBit](https://www.weatherbit.io/api)
 
-#### Example 1(1 Day 3 Hour Interval Forecast)
+#### Header 
 ```py
 import asyncio
 import discord
@@ -43,6 +43,19 @@ class Weather:
     def __init__(self, bot):
         self.bot = bot
         
+
+  -----Weather functiosn/classes-----
+
+
+# When you run bot.py ('Weather is loaded') should be printed to console
+#else if you have an error in the file(usually syntax)
+def setup(bot):
+    bot.add_cog(Weather(bot))
+    print('Weather is loaded')
+```
+
+#### Example 1(1 Day 3 Hour Interval Forecast)
+```py      
     #must me commands.commands due to this file being a cog of the main bot.py file
     #for more information on cogs: https://gist.github.com/leovoel/46cd89ed6a8f41fd09c5
  
@@ -96,28 +109,13 @@ class Weather:
                 embed.add_field(name='Chance of Rain', value=str(pop+"%"), inline=True)
                 embed.add_field(name='Humidity', value=str(hum+"%"), inline=True)
                 await self.bot.send_message(ctx.message.channel,embed=embed)
- 
-# When you run bot.py ('Weather is loaded') should be printed to console
-#else if you have an error in the file(usually syntax)
-def setup(bot):
-    bot.add_cog(Weather(bot))
-    print('Weather is loaded')
 ```
 #### Example 2(7 Day Forecast 1 Day Interval)
 ```py
-import asyncio
-import discord
-import datetime
-import urllib.request, json
-from urllib.request import urlopen
-from discord.ext import commands
 
 #This file will still use the same prefix of the main file to call functions
-#in this case it is "!" (check bot.py to see the prefix or change it)
-class Weather:
-    def __init__(self, bot):
-        self.bot = bot
-        
+#in this case it is "!" (check bot.py to see the prefix or change it)      
+
     @commands.command(pass_context=True)
     async def forecast(self,ctx):
         location = ctx.message.content
@@ -158,13 +156,7 @@ class Weather:
             embed.add_field(name='Snow', value=str(snow+"%"), inline=True)
             embed.add_field(name='Chance of Rain', value=str(pop+"%"), inline=True)
             embed.add_field(name='Humidity', value=str(hum+"%"), inline=True)
-            await self.bot.send_message(ctx.message.channel,embed=embed)
-            
-# When you run bot.py ('Weather is loaded') should be printed to console
-#else if you have an error in the file(usually syntax)
-def setup(bot):
-    bot.add_cog(Weather(bot))
-    print('Weather is loaded')
+            await self.bot.send_message(ctx.message.channel,embed=embed)           
 ```
 ### Reddit.py
 To use this file you will need an API key and API wrapper(for ease): [Reddit API](https://www.reddit.com/prefs/apps)---[Reddit API Wrapper](https://github.com/praw-dev/praw)
