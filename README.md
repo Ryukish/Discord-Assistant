@@ -6,6 +6,34 @@ This is for a Discord bot using the discord.py wrapper made for fun.
 
 
 ## Getting Started
+##### Weather.py: 
+```
+!weather: 1 Day 3 Hour Interval Forecast
+!forecast: 7 Day Forecast 1 Day Interval
+```
+##### Reddit.py
+```
+Background_Task: Used to send random reddit post to a specific user on a 3 hour interval
+!puppy: Goes to /r/puppies reddit and grabs a random post from the hot section
+```
+##### Music.py:
+```
+!summon: Bot will join the voice channel of the user who summoned it
+!play: Takes in a youtube link or title of video and plays the audio of the video
+!volume: Controls the volume of the bot(default set to 60%)
+!pause: Pauses the current song that is playing and waits
+!resume: Continues the song if it was paused 
+!EndAll: Clears the queue and the bot leaves the voice channel
+!skip: Skips the current song playing 
+!playing: Give the title of the current song playing
+```
+##### Bot.py
+```
+On_message: These type of commands will look for a keywords or phrase inside all the messages sent on discord
+!ping: The bot prints 'pong'
+!hello: The bot prints 'hi'
+!MasterThis: This command would print a link that would be specific in the code
+```
 
 ### Installing
 Installation can be completed using the following pips:
@@ -295,6 +323,7 @@ You will use Youtube-dl to download the videos into the queue(ffmpeg.exe).
 Discord api wrapper provides the framework to get the bot to join channels and play music/queue up music.
 * Youtube-dl - Used to get Youtube videos to play through discord bot
 * Discord.py API Wrapper - API wrapper to allow for python written discord bot
+
 #### Header
 ```py
 import asyncio
@@ -541,7 +570,7 @@ async def on_message(message):
         await bot.process_commands(message)
 ```
 #### Commmands(Commands use the specific bot prefix you define to call these(!hello), "!" is the prefix)
-```
+```py
 @bot.command(pass_context=True)
 async def hello(ctx):
     await bot.say("hi")
