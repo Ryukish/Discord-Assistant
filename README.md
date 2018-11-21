@@ -31,7 +31,7 @@ Background_Task: Used to send random reddit post to a specific user on a 3 hour 
 On_message: These type of commands will look for a keywords or phrase inside all the messages sent on discord
 !ping: The bot prints 'pong'
 !hello: The bot prints 'hi'
-!MasterThis: This command would print a link that would be specific in the code
+!MasterThis: This command would print a link that would be specified in the code
 ```
 
 ### Installing
