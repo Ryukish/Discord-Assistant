@@ -58,9 +58,6 @@ class VoiceState:
             self.current.player.start()
             await self.play_next_song.wait()
 class Music:
-    """Voice related commands.
-    Works in multiple servers at once.
-    """
     def __init__(self, bot):
         self.bot = bot
         self.voice_states = {}
@@ -89,7 +86,6 @@ class Music:
 
     @commands.command(pass_context=True, no_pm=True)
     async def join(self, ctx, *, channel : discord.Channel):
-        """Joins a voice channel."""
         try:
             await self.create_voice_client(channel)
         except discord.ClientException:
@@ -101,7 +97,6 @@ class Music:
 
     @commands.command(pass_context=True, no_pm=True)
     async def summon(self, ctx):
-        """Summons the bot to join your voice channel."""
         summoned_channel = ctx.message.author.voice_channel
         if summoned_channel is None:
             await self.bot.say('Not in a channel boi!!')
@@ -142,8 +137,6 @@ class Music:
 
     @commands.command(pass_context=True, no_pm=True)
     async def volume(self, ctx, value : int):
-        """Sets the volume of the currently playing song."""
-
         state = self.get_voice_state(ctx.message.server)
         if state.is_playing():
             player = state.player
@@ -152,7 +145,6 @@ class Music:
             
     @commands.command(pass_context=True, no_pm=True)
     async def resume(self, ctx):
-        """Resumes the currently played song."""
         state = self.get_voice_state(ctx.message.server)
         if state.is_playing():
             player = state.player
@@ -171,10 +163,7 @@ class Music:
             tell=0;
             
     @commands.command(pass_context=True, no_pm=True)
-    async def killyourself(self, ctx):
-        """Stops playing audio and leaves the voice channel.
-        This also clears the queue.
-        """
+    async def EndAll(self, ctx):
         server = ctx.message.server
         state = self.get_voice_state(server)
 
@@ -193,10 +182,6 @@ class Music:
 
     @commands.command(pass_context=True, no_pm=True)
     async def skip(self, ctx):
-        """Vote to skip a song. The song requester can automatically skip.
-        3 skip votes are needed for the song to be skipped.
-        """
-
         state = self.get_voice_state(ctx.message.server)
         if not state.is_playing():
             await self.bot.say('Not playing any music right now...')
@@ -216,8 +201,6 @@ class Music:
 
     @commands.command(pass_context=True, no_pm=True)
     async def playing(self, ctx):
-        """Shows info about the currently played song."""
-
         state = self.get_voice_state(ctx.message.server)
         if state.current is None:
             await self.bot.say('Not playing anything.')
