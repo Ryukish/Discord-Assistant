@@ -2,7 +2,7 @@
 ![PyPI](https://img.shields.io/badge/python-3.4--3.6-green.svg)
 ![PyPI](https://img.shields.io/badge/build-passing-green.svg)
 
-This is for a Discord assistant using the discord.py wrapper. Started off as a just a music bot, but very quickly grew to include many other featurse based on request of friends. The assistant in total took be about 2 weeks to complete and was one of my favorite projects to work on(Due to me using almost everyday).
+This is for a Discord AI Bot using the discord.py wrapper. Started off as a just a music bot, but very quickly grew to include many other featurse based on request of friends. The assistant in total took be about 2 weeks to complete and was one of my favorite projects to work on(Due to me using almost everyday).
 
 ## Getting Started
 ##### Weather.py: 
