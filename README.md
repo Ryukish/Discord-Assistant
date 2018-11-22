@@ -1,4 +1,4 @@
-# Discord-Assistant
+# Discord-AI-Bot
 ![PyPI](https://img.shields.io/badge/python-3.4--3.6-green.svg)
 ![PyPI](https://img.shields.io/badge/build-passing-green.svg)
 
